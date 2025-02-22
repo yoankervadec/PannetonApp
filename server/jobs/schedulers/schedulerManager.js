@@ -50,6 +50,25 @@ class SchedulerManager {
   }
 
   async logJobRun(status, message = null, error = null) {
+    // Log API call for daily tracking
+    await query(
+      `
+      INSERT INTO scheduler_runs (
+        scheduler_id,
+        job_name,
+        date,
+        runs
+      )
+      VALUES
+        (?, ?, CURRENT_DATE, 1)
+      ON DUPLICATE KEY
+      UPDATE
+        runs = runs + 1
+      `,
+      [this.cachedConfig.scheduler_id, this.jobName]
+    );
+
+    // Log the job run
     await query(
       `
       UPDATE
@@ -88,6 +107,8 @@ class SchedulerManager {
       console.log(`Scheduler ${this.jobName} is innactive...`);
       return;
     }
+
+    // Fixed time schedulers
     if (this.cachedConfig.run_times) {
       console.log(`Starting fixed-time scheduler for ${this.jobName}...`);
       const runTimes = Array.isArray(this.cachedConfig.run_times)
@@ -123,6 +144,8 @@ class SchedulerManager {
           }
         }
       }, 60 * 1000);
+
+      // Interval based schedulers
     } else if (this.cachedConfig.interval_ms) {
       const jobOffset = (this.cachedConfig.priority - 1) * 2000; // 2s per priority
       const now = Date.now();
@@ -185,6 +208,10 @@ class SchedulerManager {
   async triggerNow() {
     console.log(`Manually triggering job: ${this.jobName} =>`);
     try {
+      // Fetch config if needed for logging purposes
+      if (!this.cachedConfig) {
+        await this.refreshSchedulerConfig();
+      }
       await this.executeTask();
       await this.logJobRun(
         "success",

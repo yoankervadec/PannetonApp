@@ -18,6 +18,7 @@ export const stopAllSchedulers = () => {
   // Other jobs...
 };
 
+// Job name in database
 const fetchClanMembersJob = "fetchAndUpdateMembers";
 
 export const fetchClanMembersScheduler = new SchedulerManager(
@@ -28,9 +29,9 @@ export const fetchClanMembersScheduler = new SchedulerManager(
       const timestamp = new Date().toLocaleString("en-CA", {
         timeZone: "America/Toronto",
       });
-      console.log(`[${timestamp}] SUCCESS: Clan members updated successfully.`);
+      console.log(`[${timestamp}] SUCCESS: Clan Members updated successfully.`);
     } catch (error) {
-      console.error("Failed to update work table:", error.message);
+      console.error("Failed to update Clan Members:", error.message);
     }
   }
 );

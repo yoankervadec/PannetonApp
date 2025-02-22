@@ -11,6 +11,7 @@ import { startAllSchedulers } from "./jobs/schedulers/schedulerJobs.js";
 
 // Routes
 import testRoutes from "./app/routes/test.routes.js";
+import schedulerRoutes from "./app/routes/scheduler.routes.js";
 
 // Middleware
 dotenv.config();
@@ -45,9 +46,9 @@ app.use(
 
 // Routes
 app.use("/route", testRoutes);
-// const clanTag = process.env.CLAN_TAG;
-// await fetchClanMembers(clanTag);
+app.use("/schedulers", schedulerRoutes);
 
+// Comment out when working on the app
 // startAllSchedulers();
 
 const PORT = process.env.PORT;
