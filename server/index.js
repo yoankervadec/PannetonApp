@@ -10,7 +10,6 @@ import cookieParser from "cookie-parser";
 import { startAllSchedulers } from "./jobs/schedulers/schedulerJobs.js";
 
 // Routes
-import testRoutes from "./app/routes/test.routes.js";
 import schedulerRoutes from "./app/routes/scheduler.routes.js";
 
 // Middleware
@@ -45,11 +44,10 @@ app.use(
 );
 
 // Routes
-app.use("/route", testRoutes);
 app.use("/schedulers", schedulerRoutes);
 
 // Comment out when working on the app
-// startAllSchedulers();
+startAllSchedulers();
 
 const PORT = process.env.PORT;
 
