@@ -1,7 +1,7 @@
 //
 // server/jobs/models/insertAndUpdateClanMembers.js
 
-import { getConnection } from "../configs/db.config.js";
+import { getConnection } from "../../configs/db.config.js";
 
 export const insertAndUpdateClanMembers = async (
   clanMembers,
@@ -22,6 +22,7 @@ export const insertAndUpdateClanMembers = async (
         donations_received,
         last_seen,
       } = clanMembersMeta[i];
+
       // Insert or Update clan member
       const [result] = await connection.query(
         `
@@ -55,6 +56,7 @@ export const insertAndUpdateClanMembers = async (
 
       const member_id = memberRow[0]?.member_id;
 
+      // Insert metadata
       await connection.query(
         `
         INSERT INTO
@@ -76,7 +78,8 @@ export const insertAndUpdateClanMembers = async (
             level = VALUES(level),
             donations = VALUES(donations),
             donations_received = VALUES(donations_received),
-            last_seen = VALUES(last_seen)
+            last_seen = VALUES(last_seen),
+            updated_at = NOW()
         `,
         [
           member_id,
@@ -87,6 +90,16 @@ export const insertAndUpdateClanMembers = async (
           donations_received,
           last_seen,
         ]
+      );
+
+      // Set active status (updated within the last 15 minutes)
+      await connection.query(
+        `
+        UPDATE
+          clan_members_meta
+        SET
+          active = IF(updated_at >= NOW() - INTERVAL 15 MINUTE, 1, 0);
+        `
       );
     }
 

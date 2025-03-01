@@ -1,7 +1,7 @@
 //
 // server/jobs/services/patchClanInfo.js
 
-import { apiHelper } from "../api/apiHelper.js";
+import { apiHelper } from "../../api/apiHelper.js";
 
 export const patchClanInfo = async (clanTag) => {
   const infoEndpoint = `/clan/${clanTag}`;

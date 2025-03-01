@@ -4,7 +4,7 @@
 import dotenv from "dotenv";
 
 import SchedulerManager from "./schedulerManager.js";
-import { fetchClanMembers } from "../services/fetchClanMembers.js";
+import { fetchClanMembers } from "../services/clanMembers/fetchAndPatchClanMembers.js";
 
 dotenv.config();
 const clanTag = process.env.CLAN_TAG;

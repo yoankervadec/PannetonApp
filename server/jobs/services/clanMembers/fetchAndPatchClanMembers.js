@@ -1,10 +1,10 @@
 //
-// server/jobs/services/fetchClanMembers.js
+// server/jobs/services/clanMembers/fetchAndPatchClanMembers.js
 
-import { apiHelper } from "../api/apiHelper.js";
+import { apiHelper } from "../../api/apiHelper.js";
 
-import { formatDate } from "../utils/dateHelper.js";
-import { insertAndUpdateClanMembers } from "../models/insertAndUpdateClanMembers.js";
+import { formatDate } from "../../utils/dateHelper.js";
+import { insertAndUpdateClanMembers } from "../../models/clanMembers/insertAndUpdateClanMembers.js";
 
 export const fetchClanMembers = async (clanTag) => {
   const endpoint = `/clans/${clanTag}/members`;
